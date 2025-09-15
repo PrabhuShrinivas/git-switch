@@ -1,0 +1,19 @@
+[project]
+name = "blank-terminal"
+version = "0.1.0"
+description = "A minimal Python terminal project"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Your Name" }]
+
+[project.scripts]
+blank-terminal = "blank_terminal.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = { find = { where = ["src"] } }
