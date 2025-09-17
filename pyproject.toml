@@ -1,7 +1,7 @@
 [project]
 name = "git-switch"
 version = "0.1.0"
-description = "A minimal Python terminal project"
+description = "Effortlessly manage multiple Git identities and SSH keys. Generate keys, save per-profile Git name/email, and switch profiles in one command. Auto-updates ~/.ssh include and your global Git config for GitHub/GitLab."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
