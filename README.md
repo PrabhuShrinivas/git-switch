@@ -92,3 +92,14 @@ Then apply it:
 ```bash
 git-switch ssh use --name personal
 ```
+
+### Copy a profile's public key
+
+Copy a profile's public key to your clipboard for adding to GitHub/GitLab:
+
+```bash
+git-switch copy-key personal   # copy 'personal' profile's public key
+git-switch copy-key            # copy the active profile's public key
+```
+
+This uses your OS clipboard tool (pbcopy on macOS, wl-copy/xclip on Linux, clip on Windows). If unavailable, the key is printed to stdout.
