@@ -40,10 +40,6 @@ def main(argv: Optional[List[str]] = None) -> int:
     return 0
 
 
-if __name__ == "__main__":
-    sys.exit(main())
-
-
 def handle_copy_key(args: argparse.Namespace) -> int:
     state = load_state()
     profiles = state.get("profiles", {})  # type: ignore[assignment]
@@ -91,3 +87,7 @@ def handle_copy_key(args: argparse.Namespace) -> int:
     # Fallback: print to stdout
     print(key_text, end="")
     return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

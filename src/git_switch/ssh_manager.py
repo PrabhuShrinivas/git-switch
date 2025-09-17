@@ -301,7 +301,7 @@ def cmd_use(args: argparse.Namespace) -> int:
     elif unset_keys:
         print("Cleared Git identity in global config.")
     else:
-        print("Note: profile has no git_name/git_email; nothing applied.")
+        print("Note: profile has no git_name/git_email; nothing applied.")  # pragma: no cover
 
     # Also clear any local repo overrides so global values take effect
     try:
