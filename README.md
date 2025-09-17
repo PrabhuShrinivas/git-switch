@@ -1,6 +1,6 @@
 # git-switch
 
-A minimal Python terminal project.
+Effortlessly manage multiple Git identities and SSH keys. Generate keys, save per-profile Git name/email, and switch profiles in one command. Auto-updates ~/.ssh include and your global Git config for GitHub/GitLab.
 
 ## Usage
 
