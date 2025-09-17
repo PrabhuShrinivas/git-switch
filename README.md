@@ -1,4 +1,4 @@
-# blank-terminal
+# git-switch
 
 A minimal Python terminal project.
 
@@ -7,11 +7,88 @@ A minimal Python terminal project.
 After installing the project in a virtual environment, run:
 
 ```bash
-blank-terminal
+git-switch
 ```
 
 You should see:
 
 ```text
-Hello from blank-terminal 👋
+Hello from git-switch 👋
+
+## SSH profiles utility
+
+Manage multiple Git SSH accounts and switch keys quickly.
+
+### Setup
+
+```bash
+git-switch ssh init
+```
+
+This creates a managed include at `~/.ssh/git-switch-managed.conf` and ensures your `~/.ssh/config` includes it.
+
+### Add a profile
+
+Generate a new ed25519 key managed by this tool:
+
+```bash
+git-switch ssh add --name personal --email you@example.com --generate
+```
+
+If a key already exists at the generated path, either remove it or force overwrite:
+
+```bash
+git-switch ssh add --name personal --email you@example.com --generate --force
+```
+
+Or use an existing private key:
+
+```bash
+git-switch ssh add --name work --key-path ~/.ssh/id_ed25519_work --hosts github.com,gitlab.com
+```
+
+View the public key path printed, and add it to GitHub/GitLab.
+
+### List profiles
+
+```bash
+git-switch ssh list
+```
+
+### Activate a profile
+
+```bash
+git-switch ssh use --name work                  # applies Git identity globally
+```
+
+This updates `~/.ssh/git-switch-managed.conf` with the selected key for configured hosts.
+
+### Remove a profile
+
+```bash
+git-switch ssh remove --name personal
+# To also delete generated keys (only if under the managed directory):
+git-switch ssh remove --name personal --delete-keys --force
+```
+
+Profiles are stored at `~/.config/git-switch/profiles.json`. Generated keys live under `~/.ssh/git-switch/<profile>/`.
+
+### Store Git identity on profile
+
+You can save Git identity per profile during add:
+
+```bash
+git-switch ssh add --name work --key-path ~/.ssh/id_ed25519_work --git-name "Your Work Name" --git-email your.name@company.com
+```
+
+When you run `ssh use`, the saved Git identity is applied automatically to your global Git config.
+
+### Update a profile's Git identity
+
+```bash
+git-switch ssh update --name personal --git-name "New Name" --git-email new@example.com
+```
+Then apply it:
+```bash
+git-switch ssh use --name personal
 ```

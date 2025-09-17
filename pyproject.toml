@@ -1,5 +1,5 @@
 [project]
-name = "blank-terminal"
+name = "git-switch"
 version = "0.1.0"
 description = "A minimal Python terminal project"
 readme = "README.md"
@@ -8,7 +8,7 @@ license = { text = "MIT" }
 authors = [{ name = "Your Name" }]
 
 [project.scripts]
-blank-terminal = "blank_terminal.cli:main"
+git-switch = "git_switch.cli:main"
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
