@@ -2,7 +2,7 @@ PY ?= python3
 PIP ?= $(PY) -m pip
 VENV ?= .venv
 
-.PHONY: install build test test-file
+.PHONY: install build test test-file shell
 
 install:
 	@if [ -z "$$VIRTUAL_ENV" ]; then \
@@ -14,7 +14,28 @@ install:
 	fi; \
 	$$PY_CMD -m pip install -U pip; \
 	$$PIP_CMD install -e .; \
-	if [ -z "$$VIRTUAL_ENV" ]; then echo "To use the environment: source $(VENV)/bin/activate"; fi
+	if [ -z "$$VIRTUAL_ENV" ]; then \
+		if [ -z "$$NO_SHELL" ]; then \
+			if [ -n "$$ZSH_NAME" ]; then SHELL_NAME=zsh; else SHELL_NAME=bash; fi; \
+			echo "Launching interactive $$SHELL_NAME with venv activated. Exit to return."; \
+			. $(VENV)/bin/activate; \
+			exec $$SHELL_NAME -i; \
+		else \
+			echo "Virtual environment created at $(VENV). To activate: source $(VENV)/bin/activate"; \
+		fi; \
+	fi
+
+# Start an interactive subshell with the venv activated
+shell:
+	@if [ ! -d "$(VENV)" ]; then $(PY) -m venv $(VENV); fi; \
+	if [ -n "$$ZSH_NAME" ]; then \
+		SHELL_NAME=zsh; \
+	else \
+		SHELL_NAME=bash; \
+	fi; \
+	echo "Launching $$SHELL_NAME with venv activated (. $(VENV)/bin/activate)"; \
+	. $(VENV)/bin/activate; \
+	$$SHELL_NAME -i
 
 build:
 	$(PIP) install -U build wheel

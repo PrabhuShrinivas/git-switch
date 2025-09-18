@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from .ssh_manager import build_ssh_subparser, handle_ssh_command, load_state
+from .pat_manager import build_pat_subparser, handle_pat_command
 from . import __version__
 
 
@@ -17,6 +18,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     # SSH manager
     build_ssh_subparser(subparsers)
+
+    # PAT manager
+    build_pat_subparser(subparsers)
 
     # Convenience: copy-key (copies public key of a profile or active one)
     p_copy = subparsers.add_parser(
@@ -38,6 +42,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 0
     if getattr(args, "command", None) == "ssh":
         return handle_ssh_command(args)
+    if getattr(args, "command", None) == "pat":
+        return handle_pat_command(args)
     func = getattr(args, "func", None)
     if callable(func):
         return int(func(args))
