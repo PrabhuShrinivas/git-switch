@@ -26,6 +26,15 @@ def test_main_delegates_to_ssh(monkeypatch):
     assert called["args"].ssh_cmd == "list"
 
 
+def test_version_flag_prints_version(capsys):
+    rc = cli.main(["--version"])
+    out = capsys.readouterr().out.strip()
+    assert rc == 0
+    # Version should match __version__
+    from git_switch import __version__
+    assert out == __version__
+
+
 def test_handle_copy_key_no_name_and_no_active(isolate_paths, write_state, capsys):
     write_state({}, None)
     ns = argparse.Namespace(name=None)
