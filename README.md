@@ -112,6 +112,54 @@ git-switch copy-key            # copy the active profile's public key
 
 This uses your OS clipboard tool (pbcopy on macOS, wl-copy/xclip on Linux, clip on Windows). If unavailable, the key is printed to stdout.
 
+## HTTPS (PAT) profiles utility
+
+Manage Git over HTTPS using Personal Access Tokens stored via Git's credential helper.
+
+### Add a PAT profile
+
+Provide your token via stdin (recommended):
+
+```bash
+printf "%s" "$GITHUB_TOKEN" | git-switch pat add \
+  --name work-https \
+  --username your-username \
+  --hosts github.com \
+  --token-stdin \
+  --git-name "Your Work Name" \
+  --git-email your.name@company.com
+```
+
+Or pass it directly:
+
+```bash
+git-switch pat add --name personal-https --username your-username --hosts github.com \
+  --token "$GITHUB_TOKEN"
+```
+
+This stores the token in your configured Git credential helper (e.g., osxkeychain/libsecret/manager-core).
+
+### List and activate PAT profiles
+
+```bash
+git-switch pat list
+git-switch pat use --name work-https
+```
+
+Note: PAT auth works with HTTPS remotes. Convert SSH remotes as needed:
+
+```bash
+git remote set-url origin https://github.com/<owner>/<repo>.git
+```
+
+### Remove a PAT profile
+
+```bash
+git-switch pat remove --name work-https
+```
+
+This also erases saved credentials for its hosts via the credential helper.
+
 ## Development
 
 ### Makefile commands
@@ -120,8 +168,17 @@ This uses your OS clipboard tool (pbcopy on macOS, wl-copy/xclip on Linux, clip 
 
 ```bash
 make install
-# If a venv wasn't active, this creates .venv/. To activate:
-source .venv/bin/activate
+# If no venv was active, this will drop you into an interactive shell
+# with the venv activated. Exit with Ctrl-D when done.
+# To skip opening a shell (CI usage):
+# NO_SHELL=1 make install
+```
+
+- **Shell in venv**: launches a subshell with the venv activated
+
+```bash
+make shell
+# Exit with Ctrl-D when done
 ```
 
 - **Build**: builds sdist and wheel into `dist/`
