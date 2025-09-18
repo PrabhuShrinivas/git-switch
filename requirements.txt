@@ -1,0 +1,4 @@
+setuptools>=68
+wheel
+pytest
+pytest-cov

@@ -103,3 +103,34 @@ git-switch copy-key            # copy the active profile's public key
 ```
 
 This uses your OS clipboard tool (pbcopy on macOS, wl-copy/xclip on Linux, clip on Windows). If unavailable, the key is printed to stdout.
+
+## Development
+
+### Makefile commands
+
+- **Install**: creates/uses a virtual environment and installs the package in editable mode
+
+```bash
+make install
+# If a venv wasn't active, this creates .venv/. To activate:
+source .venv/bin/activate
+```
+
+- **Build**: builds sdist and wheel into `dist/`
+
+```bash
+make build
+```
+
+- **Test with coverage**: runs the full test suite and generates terminal + HTML coverage (`htmlcov/index.html`)
+
+```bash
+make test
+```
+
+- **Test an individual file or test**: pass FILE to run a specific test file or node id
+
+```bash
+make test-file FILE=tests/test_cli.py
+make test-file FILE=tests/test_cli.py::test_handle_copy_key_fallback_prints_key
+```
