@@ -25,6 +25,14 @@ Manage multiple Git SSH accounts and switch keys quickly.
 git-switch ssh init
 ```
 
+### Version
+
+Print the installed version:
+
+```bash
+git-switch --version
+```
+
 This creates a managed include at `~/.ssh/git-switch-managed.conf` and ensures your `~/.ssh/config` includes it.
 
 ### Add a profile

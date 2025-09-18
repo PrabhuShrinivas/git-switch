@@ -7,10 +7,12 @@ from pathlib import Path
 from typing import List, Optional
 
 from .ssh_manager import build_ssh_subparser, handle_ssh_command, load_state
+from . import __version__
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="git-switch", description="Developer utilities")
+    parser.add_argument("--version", action="store_true", help="Print version and exit")
     subparsers = parser.add_subparsers(dest="command", required=False)
 
     # SSH manager
@@ -31,6 +33,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Optional[List[str]] = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    if getattr(args, "version", False):
+        print(__version__)
+        return 0
     if getattr(args, "command", None) == "ssh":
         return handle_ssh_command(args)
     func = getattr(args, "func", None)
