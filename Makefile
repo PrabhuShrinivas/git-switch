@@ -17,7 +17,7 @@ install:
 	if [ -z "$$VIRTUAL_ENV" ]; then echo "To use the environment: source $(VENV)/bin/activate"; fi
 
 build:
-	$(PIP) install -U build wheel
+	$(PIP) install -U build twine
 	rm -rf dist build *.egg-info
 	$(PY) -m build
 
