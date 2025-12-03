@@ -264,5 +264,5 @@ pipx install git-switch-cli
 
 ```bash
 gswitch --version
-# Should print: 0.1.2 (or current version)
+# Should print: 0.1.3 (or current version)
 ```
