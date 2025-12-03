@@ -38,7 +38,7 @@ shell:
 	$$SHELL_NAME -i
 
 build:
-	$(PIP) install -U build wheel
+	$(PIP) install -U build twine
 	rm -rf dist build *.egg-info
 	$(PY) -m build
 

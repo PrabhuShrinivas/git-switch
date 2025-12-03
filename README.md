@@ -2,13 +2,21 @@
 
 Effortlessly manage multiple Git identities and SSH keys. Generate keys, save per-profile Git name/email, and switch profiles in one command. Auto-updates ~/.ssh include and your global Git config for GitHub/GitLab.
 
-## Usage
-
-After installing the project in a virtual environment, run:
+## Installation
 
 ```bash
-git-switch
+pip install git-switch-cli
 ```
+
+## Usage
+
+After installing, run:
+
+```bash
+gswitch
+```
+
+> **Note:** You can also use `git-switch`, but `gswitch` is recommended to avoid conflicts with Git's built-in `git switch` command (see [Troubleshooting](#troubleshooting) below).
 
 You should see:
 
@@ -22,7 +30,7 @@ Manage multiple Git SSH accounts and switch keys quickly.
 ### Setup
 
 ```bash
-git-switch ssh init
+gswitch ssh init
 ```
 
 ### Version
@@ -30,7 +38,7 @@ git-switch ssh init
 Print the installed version:
 
 ```bash
-git-switch --version
+gswitch --version
 ```
 
 This creates a managed include at `~/.ssh/git-switch-managed.conf` and ensures your `~/.ssh/config` includes it.
@@ -40,19 +48,19 @@ This creates a managed include at `~/.ssh/git-switch-managed.conf` and ensures y
 Generate a new ed25519 key managed by this tool:
 
 ```bash
-git-switch ssh add --name personal --email you@example.com --generate
+gswitch ssh add --name personal --email you@example.com --generate
 ```
 
 If a key already exists at the generated path, either remove it or force overwrite:
 
 ```bash
-git-switch ssh add --name personal --email you@example.com --generate --force
+gswitch ssh add --name personal --email you@example.com --generate --force
 ```
 
 Or use an existing private key:
 
 ```bash
-git-switch ssh add --name work --key-path ~/.ssh/id_ed25519_work --hosts github.com,gitlab.com
+gswitch ssh add --name work --key-path ~/.ssh/id_ed25519_work --hosts github.com,gitlab.com
 ```
 
 View the public key path printed, and add it to GitHub/GitLab.
@@ -60,13 +68,13 @@ View the public key path printed, and add it to GitHub/GitLab.
 ### List profiles
 
 ```bash
-git-switch ssh list
+gswitch ssh list
 ```
 
 ### Activate a profile
 
 ```bash
-git-switch ssh use --name work                  # applies Git identity globally
+gswitch ssh use --name work                  # applies Git identity globally
 ```
 
 This updates `~/.ssh/git-switch-managed.conf` with the selected key for configured hosts.
@@ -74,9 +82,9 @@ This updates `~/.ssh/git-switch-managed.conf` with the selected key for configur
 ### Remove a profile
 
 ```bash
-git-switch ssh remove --name personal
+gswitch ssh remove --name personal
 # To also delete generated keys (only if under the managed directory):
-git-switch ssh remove --name personal --delete-keys --force
+gswitch ssh remove --name personal --delete-keys --force
 ```
 
 Profiles are stored at `~/.config/git-switch/profiles.json`. Generated keys live under `~/.ssh/git-switch/<profile>/`.
@@ -86,19 +94,19 @@ Profiles are stored at `~/.config/git-switch/profiles.json`. Generated keys live
 You can save Git identity per profile during add:
 
 ```bash
-git-switch ssh add --name work --key-path ~/.ssh/id_ed25519_work --git-name "Your Work Name" --git-email your.name@company.com
+gswitch ssh add --name work --key-path ~/.ssh/id_ed25519_work --git-name "Your Work Name" --git-email your.name@company.com
 ```
 
-When you run `ssh use`, the saved Git identity is applied automatically to your global Git config.
+When you run `gswitch ssh use`, the saved Git identity is applied automatically to your global Git config.
 
 ### Update a profile's Git identity
 
 ```bash
-git-switch ssh update --name personal --git-name "New Name" --git-email new@example.com
+gswitch ssh update --name personal --git-name "New Name" --git-email new@example.com
 ```
 Then apply it:
 ```bash
-git-switch ssh use --name personal
+gswitch ssh use --name personal
 ```
 
 ### Copy a profile's public key
@@ -106,8 +114,8 @@ git-switch ssh use --name personal
 Copy a profile's public key to your clipboard for adding to GitHub/GitLab:
 
 ```bash
-git-switch copy-key personal   # copy 'personal' profile's public key
-git-switch copy-key            # copy the active profile's public key
+gswitch copy-key personal   # copy 'personal' profile's public key
+gswitch copy-key            # copy the active profile's public key
 ```
 
 This uses your OS clipboard tool (pbcopy on macOS, wl-copy/xclip on Linux, clip on Windows). If unavailable, the key is printed to stdout.
@@ -198,4 +206,63 @@ make test
 ```bash
 make test-file FILE=tests/test_cli.py
 make test-file FILE=tests/test_cli.py::test_handle_copy_key_fallback_prints_key
+```
+
+## Troubleshooting
+
+### Command not found or wrong command runs (especially with oh-my-zsh)
+
+The command `git-switch` can conflict with Git's built-in `git switch` command (introduced in Git 2.23). This is particularly common with:
+
+- **oh-my-zsh** with the `git` plugin enabled
+- Shells with git aliases or autocomplete features
+- Zsh command correction features
+
+**Solution 1: Use `gswitch` instead (recommended)**
+
+We provide an alias `gswitch` that avoids the conflict entirely:
+
+```bash
+gswitch ssh list
+gswitch ssh use --name personal
+```
+
+**Solution 2: Ensure PATH includes pip's bin directory**
+
+When installing from PyPI, the executable is placed in Python's bin directory. Make sure it's in your PATH:
+
+```bash
+# Check if the command exists and where
+which gswitch
+which git-switch
+
+# If not found, add to your ~/.zshrc or ~/.bashrc:
+export PATH="$HOME/.local/bin:$PATH"
+
+# Then reload your shell
+source ~/.zshrc
+```
+
+**Solution 3: Use the full path**
+
+```bash
+# Find where it's installed
+python -m pip show -f git-switch-cli | grep -E "^Location:|bin/gswitch"
+
+# Run with full path
+~/.local/bin/gswitch ssh list
+```
+
+**Solution 4: Install with pipx (isolated environment)**
+
+```bash
+pipx install git-switch-cli
+# pipx automatically adds its bin directory to PATH
+```
+
+### Verify installation
+
+```bash
+gswitch --version
+# Should print: 0.1.2 (or current version)
 ```
